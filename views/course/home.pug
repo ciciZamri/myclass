@@ -1,0 +1,32 @@
+extend ../layout
+
+block content
+    include ../components/navbar
+    <header class="p-4" >
+        <h1 class="text-3xl font-semibold" >Dashboard</h1>
+    </header>
+    <section class="px-4 mb-4">
+        <div class="flex justify-between" >
+            <p class="text-xl font-semibold">My Courses</p>
+            <a class="flex justify-center items-center py-1 bg-gray-900 text-white rounded w-24"  href="/course/create">
+                <span class="material-icons text-base" >add</span>
+                <p>Create</p>
+            </a>
+        </div>
+        <div class="flex">
+            each course in myCourses
+                <a class="border rounded shadow w-40 p-2 mx-1 bg-white" href="/course/view/#{course._id}" >
+                    <p class="font-semibold" >#{course.name}</p>
+                    <p>Code: #{course._id}</p>
+                </a>
+        </div>
+    </section>
+    <section class="px-4">
+        <div class="flex justify-between" >
+            <p class="text-xl font-semibold">Enrollments</p>
+            <a class="flex justify-center items-center py-1 bg-gray-900 text-white rounded w-24"  href="/course/join">
+                <span class="material-icons text-base" >add</span>
+                <p>Join</p>
+            </a>
+        </div>
+    </section>
