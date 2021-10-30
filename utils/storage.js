@@ -4,18 +4,18 @@ const AppError = require('../utils/error');
 
 const storage = new GCS({
     projectId: 'sandbox-99',
-    keyFilename: './08bf4da24.json'
+    keyFilename: './sandbox-99-9430c3a1efc9.json'
 });
 
+const bucketName = 'myclass-99';
+
 class Storage {
-    static upload(req, category) {
-        if(!(['package', 'product'].includes(category))) throw new AppError(400, 'invaild-category', 'category must be "package" or "product"');
-        const bucketName = 'bucketname';
+    static upload(req, folderName, makePublic = false) {
         return new Promise((resolve, reject) => {
             const bucket = storage.bucket(bucketName);
-            const random = Random.randomStr(12) + (Date.now()).toString();
-            const now = new Date(Date.now());
-            const gcsFileName = `${inDevMode ? `${category}s/` : ''}${now.getFullYear()}-${now.getMonth() + 1}/${random}-${req.file.originalname}`;
+            let random = Random.randomStr(12) + (Date.now()).toString() + '-';
+            if (!makePublic) random = '';
+            const gcsFileName = `${folderName}/${random}${req.file.originalname}`;
             const file = bucket.file(gcsFileName);
 
             const stream = file.createWriteStream({ metadata: { contentType: req.file.mimetype } });
@@ -25,9 +25,13 @@ class Storage {
             });
 
             stream.on('finish', async () => {
-                return file.makePublic().then(() => {
-                    resolve(`https://storage.googleapis.com/${bucketName}/${gcsFileName}`);
-                });
+                if (makePublic) {
+                    return file.makePublic().then(() => {
+                        resolve(`https://storage.googleapis.com/${bucketName}/${gcsFileName}`);
+                    });
+                } else {
+                    return gcsFileName;
+                }
             });
 
             stream.end(req.file.buffer);
@@ -38,7 +42,7 @@ class Storage {
         const options = {
             version: 'v4',
             action: 'read',
-            expires: Date.now() + minutes * 60 * 1000, // 15 minutes
+            expires: Date.now() + minutes * 60 * 1000,
         };
         const [signedUrl] = await storage
             .bucket(bucketName)

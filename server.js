@@ -24,7 +24,7 @@ app.use('/announcement', announcementRouter);
 app.use('/course', courseRouter);
 
 app.get('/', (req, res) => {
-  return res.render('index', {user: req.user});
+  return res.render('index', { user: req.user });
 });
 
 app.use((req, res) => res.render('404'));

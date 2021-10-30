@@ -5,8 +5,8 @@ block content
     <header class="p-4" >
         <h1 class="text-3xl font-semibold" >Dashboard</h1>
     </header>
-    <section class="px-4 mb-4">
-        <div class="flex justify-between" >
+    <section class="px-4 mb-6">
+        <div class="flex justify-between mb-2" >
             <p class="text-xl font-semibold">My Courses</p>
             <a class="flex justify-center items-center py-1 bg-gray-900 text-white rounded w-24"  href="/course/create">
                 <span class="material-icons text-base" >add</span>
@@ -14,6 +14,8 @@ block content
             </a>
         </div>
         <div class="flex">
+            if myCourses.length == 0
+                <p>You don't have any course yet.</p>
             each course in myCourses
                 <a class="border rounded shadow w-40 p-2 mx-1 bg-white" href="/course/view/#{course._id}" >
                     <p class="font-semibold" >#{course.name}</p>
@@ -21,12 +23,22 @@ block content
                 </a>
         </div>
     </section>
+    <hr class="border bg-gray-900 mx-4 mb-4" >
     <section class="px-4">
-        <div class="flex justify-between" >
+        <div class="flex justify-between mb-2" >
             <p class="text-xl font-semibold">Enrollments</p>
             <a class="flex justify-center items-center py-1 bg-gray-900 text-white rounded w-24"  href="/course/join">
                 <span class="material-icons text-base" >add</span>
                 <p>Join</p>
             </a>
+        </div>
+        <div class="flex">
+            if enrollments.length == 0
+                <p>You are not enrolled in any course.</p>
+            each course in enrollments
+                <a class="border rounded shadow w-40 p-2 mx-1 bg-white" href="/course/view/#{course.courseId}" >
+                    <p class="font-semibold" >#{course.courseName}</p>
+                    <p>Instructor: #{course.instructor}</p>
+                </a>
         </div>
     </section>

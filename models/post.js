@@ -6,7 +6,7 @@ const postSchema = new mongoose.Schema({
     body: { type: String, required: true },
     attachment: {
         content: { type: String },
-        category: { type: String, enum: ['url', 'pdf', 'image'] }
+        category: { type: String, enum: ['url', 'pdf', 'image', 'none'] }
     },
     userId: { type: String, required: true }, // teacher id
     courseId: { type: String, required: true },

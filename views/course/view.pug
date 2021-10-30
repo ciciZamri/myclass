@@ -11,9 +11,27 @@ block content
         <div class="flex justify-between" >
             <h1 class="font-semibold text-xl" >Posts</h1>
             if isTeacher
-                <a class="flex justify-center items-center py-1 text-blue-600 w-24"  href="/course/post/create">
+                <a class="flex justify-center items-center py-1 text-blue-600 w-24"  href="/course/post/create/#{course._id}">
                     <span class="material-icons text-md" >add</span>
                     <p>Create</p>
                 </a>
         </div>
+    </section>
+    <section>
+        if posts.length == 0
+            <p>No post yet.</p>
+        each post in posts
+            <div class="border shadow mx-4 rounded bg-white px-4 py-3 mb-3" >
+                <p class="text-xl font-semibold" >#{post.title}</p>
+                <p class="mb-2" >#{post.body}</p>
+                if post.attachment.category == 'url'
+                    <a class="text-blue-600" href="#{post.attachment.content}">#{post.attachment.content}</a>
+                <div class="flex justify-between mt-2" >
+                    <span class="text-sm" >Updated at #{post.updatedAt}</span>
+                    <div class="flex" >
+                        <a class="flex items-center text-blue-500 mr-1" href=""><span class="material-icons text-lg mr-2" >edit</span></a>
+                        <a class="flex items-center text-blue-500" href=""><span class="material-icons text-lg mr-2" >delete</span></a>
+                    </div>
+                </div>
+            </div>
     </section>

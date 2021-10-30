@@ -50,6 +50,21 @@ class CourseController {
                     foreignField: "_id",
                     as: "courses"
                 }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "courses.0.userId",
+                    foreignField: "_id",
+                    as: "instructor"
+                }
+            },
+            {
+                $project: {
+                    courseId: 1,
+                    courseName: { $arrayElemAt: ["$courses.name", 0] },
+                    instructor: { $arrayElemAt: ["$instructor.name", 0] }
+                }
             }
         ]);
         console.log(enrollments);
@@ -64,6 +79,7 @@ class CourseController {
         const course = await Course.findOne({ _id: req.params.courseId });
         if (!course) return res.status(404).render('404');
         const posts = await Post.find({ courseId: course._id });
+        console.log(posts);
         if (course.userId === req.user.id) {
             return res.render(
                 'course/view',
@@ -71,10 +87,10 @@ class CourseController {
             );
         }
         let enrollment = await Enrollment.findOne({
-            courseId: req.body.courseId,
+            courseId: req.params.courseId,
             studentId: req.user.id
         });
-        if (!enrollment) return res.render('/course/notRegistered');
+        if (!enrollment) return res.render('course/notRegistered');
         return res.render(
             'course/view',
             { course: course, posts: posts, isTeacher: false, user: req.user }
@@ -83,8 +99,8 @@ class CourseController {
 
     static async join(req, res) {
         const course = await Course.findOne({ _id: req.body.course_code });
-        if (!course) return res.render('course/join', { error: 'No course found' });
-        if(course.userId === req.user.id) return res.redirect(`/course/view/${course._id}`);
+        if (!course) return res.render('course/join', { error: 'No course found', user: req.user });
+        if (course.userId === req.user.id) return res.redirect(`/course/view/${course._id}`);
         let enrollment = await Enrollment.findOne({
             courseId: req.body.course_code,
             studentId: req.user.id

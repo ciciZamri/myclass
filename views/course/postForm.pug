@@ -1,0 +1,33 @@
+extend ../layout
+
+block content
+    include ../components/navbar
+    <div class="flex justify-center items-center" >
+        <form class="w-full mx-4 max-w-3xl rounded-md shadow-md py-4 mt-4 px-6 bg-white" action="/course/post/create" enctype="multipart/form-data" method="post">
+            <input type="hidden" name="courseId" value="#{course._id}">
+            <h1 class="font-semi-bold text-3xl mb-2" >Create a post in #{course.name}</h1>
+            <div class="mb-2" >
+                <label class="block" for="title">Title</label>
+                <input class="rounded border border-gray-900 p-1 w-full" type="text" name="title" required>
+            </div>
+            <div class="mb-2" >
+                <label class="block" for="body">Body</label>
+                <textarea class="rounded border border-gray-900 p-1 w-full" name="body" cols="30" rows="4" required></textarea>
+            </div>
+            <div class="mb-2" >
+                <label class="block" for="attachment_category">Attachment</label>
+                <select class="rounded border border-gray-900 p-1 w-full" id="attachment_category" name="attachment_category">
+                    <option value="none">None</option>
+                    <option value="pdf">PDF</option>
+                    <option value="url">URL link</option>
+                    <option value="image">Image</option>
+                </select>
+            </div>
+            <div class="mb-3" id="attachment" ></div>
+            <div class="flex justify-end items-center" >
+                <a class="text-blue-500 mr-5" href="/course/view/#{course._id}">Cancel</a>
+                <input class="px-4 py-2 bg-gray-900 rounded text-white cursor-pointer" type="submit" value="Create">
+            </div>
+        </form>
+    </div>
+    <script src="/script.js"></script>

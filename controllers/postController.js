@@ -2,25 +2,39 @@ const Course = require('../models/course');
 const Enrollment = require('../models/enrollment');
 const Post = require('../models/post');
 const Random = require('../utils/random');
+const Storage = require('../utils/storage');
 
 class PostController {
-    static async create(req, res) {
+    static async createForm(req, res) {
         const course = await Course.findOne({ _id: req.params.courseId });
         if (!course) return res.status(404).render('404');
+        if (course.userId != req.user.id) return res.status(403).render('403', { message: 'You are not allowed to create post for this course' });
+        return res.render('course/postForm', { user: req.user, course: course });
+    }
+
+    static async create(req, res) {
+        const course = await Course.findOne({ _id: req.body.courseId });
+        if (!course) return res.status(404).render('404');
         if (course.userId != req.user.id) return res.status(403).render('403', { message: 'You are not allowed to update this course' });
-        
+        let content;
+        if(req.attachment_category === 'pdf' || req.attachment_category === 'image'){
+            content = await Storage.upload(req, 'posts', false);
+        }else{
+            content = req.body.attachment_content;
+        }
         const post = new Post({
             _id: Random.randomStr(12),
             title: req.body.title,
             body: req.body.body,
             attachment: {
-                content: req.body.attachment,
+                content: content,
                 category: req.body.attachment_category
             },
             userId: req.user.id, // teacher id
-            courseId: req.params.courseId,
+            courseId: req.body.courseId,
         });
-        return res.render('/course/view/');
+        await post.save();
+        return res.redirect(`/course/view/${req.body.courseId}`);
     }
 
     static async updateForm(req, res) { }

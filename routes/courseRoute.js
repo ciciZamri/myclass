@@ -1,8 +1,16 @@
 const express = require('express');
+const Multer = require('multer');
 const Auth = require('../middlewares/auth');
 const Handler = require('../utils/handler');
 const CourseController = require('../controllers/courseController');
 const PostController = require('../controllers/postController');
+
+const multer = Multer({
+    storage: Multer.memoryStorage(),
+    limits: {
+        fileSize: 10 * 1024 * 1024 //10 MB
+    }
+});
 
 const router = express.Router();
 router.use(Auth.user());
@@ -22,8 +30,8 @@ router.post('/join', Handler(CourseController.join));
 
 router.get('/students/:courseId', Handler(CourseController.showStudents));
 
-router.get('/post/create', (req, res) => res.render('course/postForm'));
-router.post('/post/create', Handler(PostController.create));
+router.get('/post/create/:courseId', Handler(PostController.createForm));
+router.post('/post/create', multer.single('attachment_content'), Handler(PostController.create));
 
 router.get('/post/update', Handler(PostController.updateForm));
 router.post('/post/update', Handler(PostController.update));
