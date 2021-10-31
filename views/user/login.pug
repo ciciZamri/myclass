@@ -1,8 +1,9 @@
 extends ../layout
 
 block content
-    <div class="flex justify-center items-center h-screen bg-gray-200" >
-        <form class="w-80 rounded-md shadow-md py-4 px-6 bg-white" action="/user/login" method="post">
+    <div class="flex flex-col justify-center items-center h-screen bg-gray-200" >
+        <p class="text-4xl font-bold mb-8" >MyClass</p>
+        <form class="w-80 mx-4 rounded-md shadow-md py-4 px-6 bg-white" action="#{url}" method="post">
             <h1 class="font-bold text-3xl mb-2" >Login</h1>
             <div class="mb-2" >
                 <label class="block" for="email">Email</label>
@@ -17,7 +18,7 @@ block content
                     <p class="text-red-600 text-md" >#{passwordError}</p>
             </div>
             <div class="flex justify-end" >
-                <input class="px-4 py-2 bg-gray-900 rounded text-white cursor-pointer" type="submit" value="Login">
+                <input class="px-4 py-2 bg-gray-900 rounded text-white cursor-pointer  hover:bg-gray-300 hover:text-black" type="submit" value="Login">
             </div>
             <div class="flex justify-center mt-4" >
                 <a class="text-blue-500" href="/user/register">Register</a>

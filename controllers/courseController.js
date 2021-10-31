@@ -1,6 +1,7 @@
 const Course = require('../models/course');
 const Enrollment = require('../models/enrollment');
 const Post = require('../models/post');
+const User = require('../models/user');
 const Random = require('../utils/random');
 
 class CourseController {
@@ -20,15 +21,15 @@ class CourseController {
         const course = await Course.findOne({ _id: req.params.courseId });
         if (!course) return res.status(404).render('404');
         if (course.userId != req.user.id) return res.status(403).render('403', { message: 'You are not allowed to update this course' });
-        return res.render('/course/form', { course: course });
+        return res.render('course/update', { course: course, user: req.user });
     }
 
     static async update(req, res) {
-        const course = await Course.findOne({ _id: req.params.courseId });
+        const course = await Course.findOne({ _id: req.body.courseId });
         if (!course) return res.status(404).render('404');
         if (course.userId != req.user.id) return res.status(403).render('403', { message: 'You are not allowed to update this course' });
         await Course.updateOne(
-            { _id: req.params.courseId },
+            { _id: req.body.courseId },
             {
                 $set: {
                     name: req.body.name,
@@ -36,7 +37,7 @@ class CourseController {
                 }
             }
         );
-        return res.redirect(`/course/view/${req.params.courseId}`);
+        return res.redirect(`/course/view/${req.body.courseId}`);
     }
 
     static async get(req, res) {
@@ -67,7 +68,6 @@ class CourseController {
                 }
             }
         ]);
-        console.log(enrollments);
         return res.render('course/home', {
             user: req.user,
             myCourses: myCourses,
@@ -78,12 +78,12 @@ class CourseController {
     static async view(req, res) {
         const course = await Course.findOne({ _id: req.params.courseId });
         if (!course) return res.status(404).render('404');
-        const posts = await Post.find({ courseId: course._id });
-        console.log(posts);
+        const posts = await Post.findByCourse(course._id);
+        const instructor = await User.findOne({ _id: course.userId });
         if (course.userId === req.user.id) {
             return res.render(
                 'course/view',
-                { course: course, posts: posts, isTeacher: true, user: req.user }
+                { course: course, posts: posts, isTeacher: true, user: req.user, instructor: instructor }
             );
         }
         let enrollment = await Enrollment.findOne({
@@ -93,7 +93,7 @@ class CourseController {
         if (!enrollment) return res.render('course/notRegistered');
         return res.render(
             'course/view',
-            { course: course, posts: posts, isTeacher: false, user: req.user }
+            { course: course, posts: posts, isTeacher: false, user: req.user, instructor: instructor }
         );
     }
 
@@ -129,9 +129,15 @@ class CourseController {
                     foreignField: "_id",
                     as: "students"
                 }
+            },
+            {
+                $project: {
+                    courseId: 1,
+                    name: { $arrayElemAt: ["$students.name", 0] }
+                }
             }
         ]);
-        return res.render('/course/students', { students: students });
+        return res.render('course/students', { students: students, user: req.user });
     }
 
     static async remove() { }

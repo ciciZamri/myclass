@@ -17,10 +17,10 @@ router.use(Auth.user());
 
 router.get('/home', Handler(CourseController.get));
 
-router.get('/create', (req, res) => res.render('course/form', { user: req.user }));
+router.get('/create', (req, res) => res.render('course/create', { user: req.user }));
 router.post('/create', (req, res, next) => CourseController.create(req, res).catch(next));
 
-router.get('/update', Handler(CourseController.updateForm));
+router.get('/update/:courseId', Handler(CourseController.updateForm));
 router.post('/update', Handler(CourseController.update));
 
 router.get('/view/:courseId', Handler(CourseController.view));
@@ -33,9 +33,9 @@ router.get('/students/:courseId', Handler(CourseController.showStudents));
 router.get('/post/create/:courseId', Handler(PostController.createForm));
 router.post('/post/create', multer.single('attachment_content'), Handler(PostController.create));
 
-router.get('/post/update', Handler(PostController.updateForm));
-router.post('/post/update', Handler(PostController.update));
+router.get('/post/update/:postId', Handler(PostController.updateForm));
+router.post('/post/update', multer.single('attachment_content'), Handler(PostController.update));
 
-router.delete('/post/remove', Handler(PostController.remove));
+router.get('/post/remove/:postId', Handler(PostController.remove));
 
 module.exports = router;

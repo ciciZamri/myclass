@@ -1,0 +1,42 @@
+extend ../layout
+
+block content
+    include ../components/navbar
+    <div class="flex justify-center items-center" >
+        <form class="w-full mx-4 max-w-3xl rounded-md shadow-md py-4 mt-4 px-6 bg-white" action="/course/post/update" enctype="multipart/form-data" method="post">
+            <input type="hidden" name="postId" value="#{post._id}">
+            <h1 class="font-semi-bold text-3xl mb-2" >Update post</h1>
+            <div class="mb-2" >
+                <label class="block" for="title">Title</label>
+                <input class="rounded border border-gray-900 p-1 w-full" type="text" name="title" value='#{post.title}' required>
+            </div>
+            <div class="mb-2" >
+                <label class="block" for="body">Body</label>
+                <textarea class="rounded border border-gray-900 p-1 w-full" name="body" cols="30" rows="4" required>#{post.body}</textarea>
+            </div>
+            <div class="mb-3">
+                <p class="font-semibold" >Current attachment</p>
+                if post.attachment.category == 'url'
+                    <p>URL link</p>
+                    <p>#{post.attachment.content}</p>
+                if post.attachment.category == 'pdf'
+                    <p>PDF</p>
+                    <p>#{post.attachment.content}</p>
+                if post.attachment.category == 'image'
+                    <p>Image</p>
+                    <p>#{post.attachment.content}</p>
+                if post.attachment.category == 'none'
+                    <p>None</p>
+            </div>
+            <div class="mb-2">
+                <input type="checkbox" name="update_attachment" id="update_attachment" value="update_attachment">
+                <label for="update_attachment">Update attachment</label>
+            </div>
+            <div id="attachment_container" ></div>
+            <div class="flex justify-end items-center" >
+                <a class="text-blue-500 mr-5" href="/course/view/#{post.courseId}">Cancel</a>
+                <input class="px-4 py-2 bg-gray-900 rounded text-white cursor-pointer" type="submit" value="Update">
+            </div>
+        </form>
+    </div>
+    <script src="/updatePost.js"></script>

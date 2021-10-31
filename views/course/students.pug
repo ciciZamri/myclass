@@ -1,0 +1,19 @@
+extend ../layout
+
+block content
+    include ../components/navbar
+    <div class="m-4" >
+        <p class="text-2xl font-bold mb-4" >List of all students (Total: #{students.length})</p>
+        <div class="bg-white rounded border shadow p-3" >
+            <div class="flex font-semibold" >
+                <p class="w-12" >No</p>
+                <p>Name</p>
+            </div>
+            <hr class="border bg-gray-700 my-2" >
+            each student, index in students
+                <div class="flex" >
+                    <p class="w-12" >#{index}</p>
+                    <p>#{student.name}</p>
+                </div>
+        </div>
+    </div>

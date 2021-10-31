@@ -14,8 +14,8 @@ class Storage {
         return new Promise((resolve, reject) => {
             const bucket = storage.bucket(bucketName);
             let random = Random.randomStr(12) + (Date.now()).toString() + '-';
-            if (!makePublic) random = '';
-            const gcsFileName = `${folderName}/${random}${req.file.originalname}`;
+            if(!makePublic) random = '';
+            const gcsFileName = `${folderName}/${req.user.id}/${random}${req.file.originalname}`;
             const file = bucket.file(gcsFileName);
 
             const stream = file.createWriteStream({ metadata: { contentType: req.file.mimetype } });
@@ -30,7 +30,7 @@ class Storage {
                         resolve(`https://storage.googleapis.com/${bucketName}/${gcsFileName}`);
                     });
                 } else {
-                    return gcsFileName;
+                    return resolve(gcsFileName);
                 }
             });
 

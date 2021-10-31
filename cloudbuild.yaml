@@ -1,13 +1,13 @@
 steps:
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/sandbox-99/checkit', '.']
+  args: ['build', '-t', 'gcr.io/sandbox-99/myclass', '.']
 # Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/sandbox-99/checkit']
+  args: ['push', 'gcr.io/sandbox-99/myclass']
 # Deploy container image to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
-  args: ['run', 'deploy', 'checkit', '--image', 'gcr.io/sandbox-99/checkit', '--region', 'asia-southeast1', '--platform', 'managed', '--allow-unauthenticated', '--max-instances', '3']
+  args: ['beta', 'run', 'deploy', 'myclass', '--image', 'gcr.io/sandbox-99/myclass', '--region', 'asia-southeast1', '--platform', 'managed', '--allow-unauthenticated', '--max-instances', '5', '--set-secrets', 'PRODUCTION_DB_URL=myclass-db-url:latest,TOKEN=myclass-token:latest']
 images:
-- gcr.io/sandbox-99/checkit
+- gcr.io/sandbox-99/myclass

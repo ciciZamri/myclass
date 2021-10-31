@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 Not found</title>
-</head>
-<body>
-    <h1>404 NOT FOUND</h1>
-</body>
-</html>
+extends layout
+
+block content
+    <div class="flex justify-center items-center h-screen" >
+        <div class="flex justify-center items-center flex-col" >
+            <p class="text-5xl font-bold" >404</p>
+            <p class="text-xl font-semibold mb-4" >Not Found</p>
+            <a class="py-2 px-4 text-white bg-gray-900 rounded shadow hover:bg-gray-300 hover:text-black" href="/course/home">Go to My Dashboard</a>
+        </div>
+    </div>

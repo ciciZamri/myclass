@@ -2,36 +2,66 @@ extend ../layout
 
 block content
     include ../components/navbar
+    <section></section>
     <header class="rounded bg-white shadow p-4 mx-4 my-2" >
         <h1 class="text-2xl font-bold" >#{course.name}</h1>
-        <p>Class code: #{course._id}</p>
         <p>#{course.description}</p>
+        <p class="font-semibold mt-3">Class code</p>
+        <p>#{course._id}</p>
+        <p class="font-semibold mt-2">Instructor</p>
+        <p >#{instructor.name}</p>
+        if course.userId == user.id
+            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 mt-3" >
+                <a class="flex border-2 items-center justify-center text-blue-500 hover:bg-gray-300 rounded px-3" href="/course/students/#{course._id}">
+                    <span class="material-icons text-xl mr-2" >groups</span>
+                    <p>View students</p>
+                </a>
+                <a class="flex border-2 items-center justify-center text-blue-500 hover:bg-gray-300 rounded px-3" href="/course/update/#{course._id}">
+                    <span class="material-icons text-lg mr-2" >edit</span>
+                    <p>Edit</p>
+                </a>
+                //- <a class="flex border-2 items-center justify-center text-blue-500 hover:bg-gray-300 rounded px-3" href="/course/remove/#{course._id}">
+                //-     <span class="material-icons text-lg mr-2" >delete</span>
+                //-     <p>Remove</p>
+                //- </a>
+            </div>
     </header>
     <section class="mx-4" >
-        <div class="flex justify-between" >
-            <h1 class="font-semibold text-xl" >Posts</h1>
+        <div class="flex items-center mb-3 mt-4" >
+            <h1 class="font-semibold text-xl pb-1" >Posts</h1>
             if isTeacher
-                <a class="flex justify-center items-center py-1 text-blue-600 w-24"  href="/course/post/create/#{course._id}">
-                    <span class="material-icons text-md" >add</span>
-                    <p>Create</p>
+                <a class="flex justify-center items-center text-blue-600 hover:bg-gray-300 rounded px-3 ml-3"  href="/course/post/create/#{course._id}">
+                    <span class="material-icons py-1 text-md font-bold" >add</span>
+                    <p class="" >Add</p>
                 </a>
         </div>
     </section>
     <section>
         if posts.length == 0
-            <p>No post yet.</p>
+            <p class="mx-4" >No post yet.</p>
         each post in posts
             <div class="border shadow mx-4 rounded bg-white px-4 py-3 mb-3" >
                 <p class="text-xl font-semibold" >#{post.title}</p>
                 <p class="mb-2" >#{post.body}</p>
                 if post.attachment.category == 'url'
                     <a class="text-blue-600" href="#{post.attachment.content}">#{post.attachment.content}</a>
+                if post.attachment.category == 'pdf'
+                    <a class="flex w-min items-center border border-gray-500 rounded p-2 hover:bg-gray-400" href="#{post.attachment.content}" target="_blank" >
+                        <span class="material-icons text-red-500 mr-2" >picture_as_pdf</span>
+                        <p>#{post.attachment.label}</p>
+                    </a>
+                if post.attachment.category == 'image'
+                    <a class="flex flex-col w-min items-center border border-gray-500 rounded p-2 hover:bg-gray-400" href="#{post.attachment.content}" target="_blank" >
+                        <img class="w-full h-24 object-cover" src="#{post.attachment.content}" alt="image attachment">
+                        <p>#{post.attachment.label}</p>
+                    </a>
                 <div class="flex justify-between mt-2" >
-                    <span class="text-sm" >Updated at #{post.updatedAt}</span>
-                    <div class="flex" >
-                        <a class="flex items-center text-blue-500 mr-1" href=""><span class="material-icons text-lg mr-2" >edit</span></a>
-                        <a class="flex items-center text-blue-500" href=""><span class="material-icons text-lg mr-2" >delete</span></a>
-                    </div>
+                    <span class="text-sm" >#{post.updatedAt}</span>
+                    if user.id == post.userId
+                        <div class="flex" >
+                            <a class="flex items-center text-blue-500 hover:bg-gray-300 rounded px-2" href="/course/post/update/#{post._id}"><span class="material-icons text-lg" >edit</span></a>
+                            <a class="flex items-center text-blue-500 hover:bg-gray-300 rounded px-2" href="/course/post/remove/#{post._id}"><span class="material-icons text-lg" >delete</span></a>
+                        </div>
                 </div>
             </div>
     </section>

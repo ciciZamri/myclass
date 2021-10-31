@@ -33,8 +33,8 @@ class UserController {
         const token = jwt.sign({ userId: user._id, role: 'user' }, process.env.TOKEN, { expiresIn: '7 days' });
         return res.cookie('token', token, {
             httpOnly: true,
-            expires: new Date(Date.now() + 3600000 * 24 * 7) // 7 days
-        }).redirect('/course/home');
+            expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7) // 7 days
+        }).redirect(req.query.redirectTo || '/course/home');
     }
 
     static logout(req, res) {
@@ -46,9 +46,9 @@ class UserController {
         return res.render('user/profile', { user: user });
     }
 
-    static async updateForm(req, res){
-        const user = await User.findOne({_id: req.user.id});
-        return res.render('user/edit', {user: user})
+    static async updateForm(req, res) {
+        const user = await User.findOne({ _id: req.user.id });
+        return res.render('user/edit', { user: user })
     }
 
     static async update(req, res) {

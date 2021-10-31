@@ -1,7 +1,8 @@
 extends ../layout
 
 block content
-    <div class="flex justify-center  items-center h-screen bg-gray-200" >
+    <div class="flex flex-col justify-center items-center h-screen bg-gray-200" >
+        <p class="text-4xl font-bold mb-8" >MyClass</p>
         <form class="w-80 rounded-md shadow-md py-4 px-6 bg-white" action="/user/register" method="post">
             <h1 class="font-bold text-3xl mb-2" >Register</h1>
             <div class="mb-2" >
@@ -28,7 +29,7 @@ block content
                 <input class="rounded border border-gray-900 p-1 w-full" type="password" name="password" required>
             </div>
             <div class="flex justify-end" >
-                <input class="px-4 py-2 bg-gray-900 rounded text-white cursor-pointer" type="submit" value="Register">
+                <input class="px-4 py-2 bg-gray-900 rounded text-white cursor-pointer  hover:bg-gray-300 hover:text-black" type="submit" value="Register">
             </div>
             <div class="flex justify-center mt-4" >
                 <a class="text-blue-500" href="/user/login">Login</a>

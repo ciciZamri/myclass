@@ -3,8 +3,9 @@ const jwt = require('jsonwebtoken');
 const authenticate = (allowedRoles) => {
     return (req, res, next) => {
         const token = req.cookies.token;
-        if (!token) return res.status(401).redirect('/user/login');
-
+        let redirectUrl = '/user/login';
+        if(req.originalUrl != '/user/login') redirectUrl += `?redirectTo=${req.originalUrl}`;
+        if (!token) return res.status(401).redirect(redirectUrl);
         jwt.verify(token, process.env.TOKEN, (err, decoded) => {
             if (err) {
                 if (process.env.NODE_ENV != 'production') console.log(err);
