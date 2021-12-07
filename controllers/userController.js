@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 
 class UserController {
     static async register(req, res) {
-        // check if user already exists
+        // TODO: check if email already in use
         const id = Random.randomStr(15);
         const saltRound = 10;
         const passwordHash = bcrypt.hashSync(req.body.password, saltRound);
