@@ -10,6 +10,7 @@ block content
         <p>#{course._id}</p>
         <p class="font-semibold mt-2">Instructor</p>
         <p >#{instructor.name}</p>
+        <a class="bg-gray-900 text-white px-4 py-1 mt-3 inline-block hover:bg-gray-500 rounded" href="/chat/index/#{course._id}">Chat</a>
         if course.userId == user.id
             <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 mt-3" >
                 <a class="flex border-2 items-center justify-center text-blue-500 hover:bg-gray-300 rounded px-3" href="/course/students/#{course._id}">
