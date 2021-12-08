@@ -3,6 +3,7 @@ const Enrollment = require('../models/enrollment');
 const Post = require('../models/post');
 const User = require('../models/user');
 const Random = require('../utils/random');
+const firebase = require('firebase-admin');
 
 class CourseController {
     static async create(req, res) {
@@ -14,6 +15,7 @@ class CourseController {
             userId: req.user.id
         });
         await course.save();
+        firebase.firestore().collection('chats').doc(id).set({ updatedAt: Date.now() });
         return res.redirect(`/course/view/${id}`);
     }
 
